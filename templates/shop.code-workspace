@@ -1,0 +1,34 @@
+{
+	"folders": [
+		{
+			"path": "../../shop"
+		},
+		{
+			"path": "../config"
+		},
+		{
+			"path": "../media"
+		},
+		{
+			"path": "../orders"
+		},
+		{
+			"path": "."
+		},
+		{
+			"path": "../venv"
+		},
+		{
+			"path": "../.vscode"
+		},
+		{
+			"path": "../accounts"
+		},
+		{
+			"path": "../catalog"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "shop"
+	}
+}

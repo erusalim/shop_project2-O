@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block title %}Редактировать профиль{% endblock %}
+
+{% block content %}
+<style>
+    .edit-profile-wrapper {
+        max-width: 600px;
+        margin: 50px auto;
+        background: rgba(26, 26, 46, 0.7);
+        padding: 30px;
+        border-radius: 16px;
+        border: 1px solid rgba(0, 255, 128, 0.2);
+    }
+
+    .edit-profile-header {
+        text-align: center;
+        border-bottom: 1px solid rgba(0, 255, 128, 0.2);
+        padding-bottom: 20px;
+        margin-bottom: 30px;
+    }
+
+    .edit-profile-header h2 {
+        color: #00ff80;
+        margin: 0;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        color: #cbd5f5;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid rgba(0, 255, 128, 0.2);
+        border-radius: 8px;
+        background: rgba(15, 20, 40, 0.5);
+        color: #cbd5f5;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: #00ff80;
+        box-shadow: 0 0 5px rgba(0, 255, 128, 0.5);
+    }
+
+    .btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-primary {
+        background: #00ff80;
+        color: #1a1a2e;
+    }
+
+    .btn-primary:hover {
+        background: #00cc66;
+    }
+
+    .btn-secondary {
+        background: rgba(0, 255, 128, 0.2);
+        color: #cbd5f5;
+        margin-left: 10px;
+    }
+
+    .btn-secondary:hover {
+        background: rgba(0, 255, 128, 0.3);
+    }
+</style>
+
+<div class="edit-profile-wrapper">
+    <div class="edit-profile-header">
+        <h2>Редактировать профиль</h2>
+    </div>
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="form-group">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}
+                <div class="text-danger">
+                    {% for error in field.errors %}
+                        <small>{{ error }}</small>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+        <a href="{% url 'profile' %}" class="btn btn-secondary">Отмена</a>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block title %}Мой профиль{% endblock %}
+
+{% block content %}
+<style>
+    .profile-wrapper {
+        max-width: 600px;
+        margin: 50px auto;
+        background: rgba(26, 26, 46, 0.7);
+        padding: 30px;
+        border-radius: 16px;
+        border: 1px solid rgba(0, 255, 128, 0.2);
+    }
+
+    .profile-header {
+        text-align: center;
+        border-bottom: 1px solid rgba(0, 255, 128, 0.2);
+        padding-bottom: 20px;
+        margin-bottom: 30px;
+    }
+
+    .profile-header h2 {
+        color: #00ff80;
+        margin: 0;
+    }
+
+    .profile-info {
+        margin-bottom: 30px;
+        padding: 20px;
+        background: rgba(15, 20, 40, 0.5);
+        border-radius: 8px;
+        border: 1px solid rgba(0, 255, 128, 0.1);
+    }
+
+    .profile-info p {
+        margin: 10px 0;
+        color: #cbd5f5;
+    }
+
+    .profile-field {
+        font-weight: bold;
+        color: #00ff80;
+    }
+
+    .btn-group {
+        display: flex;
+        gap: 10px;
+    }
+
+    .btn-secondary {
+        flex: 1;
+        padding: 12px;
+        background: rgba(100, 116, 139, 0.3);
+        border: 1px solid rgba(0, 255, 128, 0.3);
+        border-radius: 8px;
+        color: #cbd5f5;
+        font-weight: bold;
+        text-decoration: none;
+        text-align: center;
+        transition: 0.3s;
+    }
+
+    .btn-secondary:hover {
+        background: rgba(100, 116, 139, 0.5);
+    }
+</style>
+
+<div class="profile-wrapper">
+    <div class="profile-header">
+        <h2>👤 Мой профиль</h2>
+    </div>
+
+    <div class="profile-info">
+        <p><span class="profile-field">Имя пользователя:</span> {{ user.username }}</p>
+        <p><span class="profile-field">Email:</span> {{ user.email|default:"Не указан" }}</p>
+        <p><span class="profile-field">Общее количество заказов:</span> {{ orders_count }}</p>
+        <p><span class="profile-field">Заказов в доставке:</span> {{ in_delivery_count }}</p>
+    </div>
+
+    <div class="btn-group">
+        <a href="{% url 'orders:my_orders' %}" class="btn-secondary">Мои заказы</a>
+    </div>
+</div>
+{% endblock %}

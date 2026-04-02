@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block content %}
+
+<style>
+.product-wrapper {
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+/* Изображение */
+.product-image {
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    box-shadow: 0 0 25px rgba(56, 189, 248, 0.2);
+    transition: 0.3s;
+    margin-bottom: 20px;
+}
+
+.product-image img {
+    width: 100%;
+    transition: 0.4s;
+}
+
+.product-image:hover img {
+    transform: scale(1.05);
+}
+
+/* Блок информации */
+.product-info {
+    background: rgba(15, 23, 42, 0.7);
+    padding: 25px;
+    border-radius: 16px;
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+/* Заголовок */
+.product-title {
+    color: #38bdf8;
+    text-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
+}
+
+/* Цена */
+.product-price {
+    color: #22c55e;
+    font-weight: bold;
+    font-size: 28px;
+    text-shadow: 0 0 10px rgba(34, 197, 94, 0.6);
+}
+
+/* Кнопка */
+.btn-success {
+    background: linear-gradient(135deg, #22c55e, #4ade80);
+    border: none;
+    box-shadow: 0 0 15px rgba(34, 197, 94, 0.6);
+}
+
+.btn-success:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 25px rgba(74, 222, 128, 0.9);
+}
+
+.btn-secondary {
+    background: rgba(100, 116, 139, 0.3);
+    border: none;
+    color: #e2e8f0;
+}
+
+p {
+    color: #cbd5f5;
+}
+</style>
+
+<div class="product-wrapper">
+
+    <!-- Картинка -->
+    {% if product.images.exists %}
+        <div class="product-image">
+            <img src="{{ product.images.first.image.url }}" 
+                 alt="{{ product.images.first.alt_text }}">
+        </div>
+    {% else %}
+        <div class="product-image p-5">
+            Нет изображения
+        </div>
+    {% endif %}
+
+    <!-- Текст под картинкой -->
+    <div class="product-info">
+        <h2 class="product-title">{{ product.name }}</h2>
+
+        <strong>{{ product.price }} ₸</strong>
+
+        <p>{{ product.description }}</p>
+
+        <p><strong>Категория:</strong> {{ product.category.name }}</p>
+        <p><strong>Остаток:</strong> {{ product.stock }} шт.</p>
+
+        <form method="post" action="{% url 'add_to_cart' product.slug %}">
+            {% csrf_token %}
+            <div class="input-group mt-3">
+                <input type="number" name="quantity" class="form-control" min="1" max="{{ product.stock }}" value="1" required>
+                <button type="submit" class="btn btn-success">🛒 Добавить в корзину</button>
+            </div>
+        </form>
+
+        <form method="post" action="{% url 'buy_now' product.slug %}" class="mt-2">
+            {% csrf_token %}
+            <input type="hidden" name="quantity" value="1">
+            <button type="submit" class="btn btn-primary w-100">💳 Купить сейчас</button>
+        </form>
+    </div>
+
+    <a href="{% url 'home' %}" class="btn btn-secondary mt-4">
+        Назад
+    </a>
+
+</div>
+
+{% endblock %}

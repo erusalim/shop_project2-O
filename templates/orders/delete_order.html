@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+
+{% block title %}Удаление заказа{% endblock %}
+
+{% block content %}
+<style>
+    .delete-container {
+        max-width: 600px;
+        margin: 60px auto;
+        text-align: center;
+    }
+    
+    .warning-box {
+        background: rgba(244, 67, 54, 0.1);
+        border: 2px solid #f44336;
+        border-radius: 16px;
+        padding: 40px;
+        margin-bottom: 30px;
+    }
+    
+    .warning-box h2 {
+        color: #f44336;
+        margin-bottom: 20px;
+        font-size: 1.8em;
+    }
+    
+    .warning-box p {
+        color: #cbd5f5;
+        font-size: 1.1em;
+        margin-bottom: 15px;
+    }
+    
+    .order-info {
+        background: rgba(26, 26, 46, 0.7);
+        border: 1px solid rgba(0, 255, 128, 0.2);
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 30px;
+        text-align: left;
+    }
+    
+    .order-info-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        color: #cbd5f5;
+        border-bottom: 1px solid rgba(0, 255, 128, 0.1);
+    }
+    
+    .order-info-row:last-child {
+        border-bottom: none;
+    }
+    
+    .order-label {
+        color: #00ff80;
+        font-weight: bold;
+    }
+    
+    .buttons {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+    }
+    
+    .btn-cancel {
+        flex: 1;
+        max-width: 250px;
+        padding: 14px 30px;
+        background: rgba(0, 191, 255, 0.2);
+        color: #00bfff;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: bold;
+        font-size: 1em;
+        border: 1px solid #00bfff;
+        transition: 0.3s;
+        cursor: pointer;
+    }
+    
+    .btn-cancel:hover {
+        background: rgba(0, 191, 255, 0.3);
+        box-shadow: 0 0 15px rgba(0, 191, 255, 0.6);
+    }
+    
+    .btn-delete {
+        flex: 1;
+        max-width: 250px;
+        padding: 14px 30px;
+        background: linear-gradient(135deg, #f44336, #e53935);
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        font-size: 1em;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+    
+    .btn-delete:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 20px rgba(244, 67, 54, 0.8);
+    }
+</style>
+
+<div class="delete-container">
+    <div class="warning-box">
+        <h2>⚠️ Внимание!</h2>
+        <p>Вы собираетесь удалить заказ. Это действие нельзя отменить.</p>
+        <p style="color: #f44336; font-weight: bold;">Все данные о заказе будут удалены навсегда.</p>
+    </div>
+    
+    <div class="order-info">
+        <div class="order-info-row">
+            <span class="order-label">Номер заказа:</span>
+            <span>#{{ order.id }}</span>
+        </div>
+        <div class="order-info-row">
+            <span class="order-label">ФИО:</span>
+            <span>{{ order.full_name }}</span>
+        </div>
+        <div class="order-info-row">
+            <span class="order-label">Статус:</span>
+            <span>{{ order.get_status_display }}</span>
+        </div>
+        <div class="order-info-row">
+            <span class="order-label">Дата создания:</span>
+            <span>{{ order.created_at|date:"d.m.Y H:i" }}</span>
+        </div>
+        <div class="order-info-row">
+            <span class="order-label">Сумма заказа:</span>
+            <span>{{ order.total_price }} ₸</span>
+        </div>
+    </div>
+    
+    <div class="buttons">
+        <a href="{% url 'order_detail' order.id %}" class="btn-cancel">← Отмена</a>
+        <form method="post" style="flex: 1; max-width: 250px;">
+            {% csrf_token %}
+            <button type="submit" class="btn-delete" style="width: 100%;">🗑️ Удалить заказ</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Оплата заказа #{{ order.id }}{% endblock %}
+
+{% block content %}
+<h2>💳 Оплата заказа #{{ order.id }}</h2>
+
+{% if error %}
+<div class="alert alert-danger">{{ error }}</div>
+{% endif %}
+
+<div class="card" style="background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(56, 189, 248, 0.2); padding: 18px; margin-bottom: 20px;">
+    <p><strong>Сумма к оплате:</strong> {{ order.total_price }} ₸</p>
+    <p><strong>Получатель:</strong> {{ order.full_name }}</p>
+</div>
+
+<form method="post" class="card" style="background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(56, 189, 248, 0.2); padding: 18px;">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label class="form-label">Номер карты</label>
+        <input type="text" name="card_number" class="form-control" placeholder="1234 5678 9012 3456" required>
+    </div>
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Срок действия</label>
+            <input type="text" name="expiry_date" class="form-control" placeholder="MM/YY" required>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label class="form-label">CVV</label>
+            <input type="text" name="cvv" class="form-control" placeholder="123" required>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Имя владельца</label>
+        <input type="text" name="cardholder_name" class="form-control" placeholder="IVAN IVANOV" required>
+    </div>
+    <button type="submit" class="btn btn-success">Оплатить</button>
+    <a href="{% url 'orders:order_detail' order.id %}" class="btn btn-outline-light">Назад к заказу</a>
+</form>
+
+{% endblock %}

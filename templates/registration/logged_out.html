@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Выход{% endblock %}
+
+{% block content %}
+<style>
+    .logout-wrapper {
+        max-width: 520px;
+        margin: 80px auto;
+        padding: 30px;
+        border-radius: 14px;
+        background: rgba(15, 20, 40, 0.75);
+        border: 1px solid rgba(0, 255, 128, 0.2);
+        text-align: center;
+    }
+
+    .logout-wrapper h2 {
+        color: #00ff80;
+        margin-bottom: 15px;
+    }
+
+    .logout-wrapper p {
+        color: #cbd5f5;
+        margin-bottom: 20px;
+    }
+
+    .logout-wrapper a {
+        display: inline-block;
+        padding: 10px 20px;
+        border-radius: 8px;
+        color: #0b0f1f;
+        background: #00ff80;
+        font-weight: bold;
+        text-decoration: none;
+        transition: background 0.2s ease;
+    }
+
+    .logout-wrapper a:hover {
+        background: #00cc68;
+    }
+</style>
+
+<div class="logout-wrapper">
+    <h2>Вы успешно вышли</h2>
+    <p>Спасибо за визит! Чтобы вернуться, войдите снова.</p>
+    <a href="{% url 'login' %}">Войти</a>
+</div>
+{% endblock %}

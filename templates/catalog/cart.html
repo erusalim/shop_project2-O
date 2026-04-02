@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %}Корзина{% endblock %}
+
+{% block content %}
+<style>
+    .cart-header, .search-header {
+        color: #e0f2fe;
+        text-shadow: 0 0 8px rgba(56, 189, 248, 0.7);
+    }
+
+    .cart-card, .search-card {
+        background: rgba(15, 23, 42, 0.8);
+        border: 1px solid rgba(56, 189, 248, 0.2);
+        border-radius: 16px;
+        box-shadow: 0 0 20px rgba(8, 145, 178, 0.25);
+        padding: 18px;
+        margin-bottom: 20px;
+    }
+
+    .cart-empty {
+        background: rgba(30, 41, 59, 0.8);
+        border: 1px solid rgba(59, 130, 246, 0.2);
+        border-radius: 12px;
+        padding: 20px;
+    }
+
+    .btn-action {
+        background: linear-gradient(135deg, #3b82f6, #06b6d4);
+        border: none;
+        color: #ffffff;
+    }
+
+    .btn-action:hover {
+        transform: scale(1.02);
+        box-shadow: 0 0 18px rgba(6, 182, 212, 0.7);
+    }
+</style>
+
+<h2 class="cart-header">🛒 Ваша корзина</h2>
+
+{% if items %}
+    <div class="cart-card">
+        <div class="table-responsive">
+            <table class="table table-dark table-borderless mb-0">
+                <thead>
+                    <tr>
+                        <th>Товар</th>
+                        <th>Цена</th>
+                        <th>Кол-во</th>
+                        <th>Сумма</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr>
+                        <td><a class="link-light" href="{% url 'product_detail' item.product.slug %}">{{ item.product.name }}</a></td>
+                        <td>{{ item.product.price }} ₸</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ item.subtotal }} ₸</td>
+                        <td>
+                            <form method="post" action="{% url 'remove_from_cart' item.product.slug %}">
+                                {% csrf_token %}
+                                <button class="btn btn-sm btn-outline-danger" type="submit">Удалить</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="mt-4 d-flex justify-content-between align-items-center">
+            <h4>Итого: {{ total }} ₸</h4>
+            <div>
+                <a href="{% url 'orders:checkout' %}" class="btn btn-action me-2">Оформить заказ</a>
+                <a href="{% url 'home' %}" class="btn btn-action">Продолжить покупки</a>
+            </div>
+        </div>
+    </div>
+{% else %}
+    <div class="cart-empty">
+        <h5>Ваша корзина пуста</h5>
+        <p>Добавьте товары в корзину и вернитесь сюда.</p>
+        <a href="{% url 'home' %}" class="btn btn-action">Перейти в каталог</a>
+    </div>
+{% endif %}
+
+{% endblock %}

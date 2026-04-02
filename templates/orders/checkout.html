@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Оформление заказа{% endblock %}
+
+{% block content %}
+<h2>Оформление заказа</h2>
+
+{% if error %}
+<div class="alert alert-danger">{{ error }}</div>
+{% endif %}
+
+<div class="card" style="background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(56, 189, 248, 0.2); padding: 18px; margin-bottom: 20px;">
+    <p><strong>Всего товаров:</strong> {{ cart_items|length }}</p>
+    <p><strong>Сумма:</strong> {{ total }} ₸</p>
+</div>
+
+<form method="post" class="card" style="background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(56, 189, 248, 0.2); padding: 18px;">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label class="form-label">ФИО</label>
+        <input type="text" name="full_name" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Телефон</label>
+        <input type="text" name="phone" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Адрес доставки</label>
+        <textarea name="address" class="form-control" rows="3" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Подтвердить заказ</button>
+    <a href="{% url 'cart_detail' %}" class="btn btn-outline-light">Назад к корзине</a>
+</form>
+
+{% endblock %}

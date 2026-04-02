@@ -1,0 +1,302 @@
+{% extends 'base.html' %}
+
+{% block title %}Заказ #{{ order.id }}{% endblock %}
+
+{% block content %}
+<style>
+    .order-detail-container {
+        max-width: 800px;
+        margin: 40px auto;
+    }
+
+    .order-success-header {
+        text-align: center;
+        margin-bottom: 30px;
+        padding: 30px;
+        background: rgba(76, 175, 80, 0.1);
+        border: 2px solid #4caf50;
+        border-radius: 16px;
+    }
+
+    .order-success-header h2 {
+        color: #4caf50;
+        font-size: 2em;
+        margin-bottom: 10px;
+    }
+
+    .order-success-header p {
+        color: #cbd5f5;
+        font-size: 1.1em;
+    }
+
+    .order-info-card {
+        background: rgba(26, 26, 46, 0.7);
+        border: 1px solid rgba(0, 255, 128, 0.2);
+        border-radius: 16px;
+        padding: 25px;
+        margin-bottom: 20px;
+    }
+
+    .order-info-card h3 {
+        color: #00ff80;
+        margin-bottom: 15px;
+        border-bottom: 1px solid rgba(0, 255, 128, 0.2);
+        padding-bottom: 10px;
+    }
+
+    .info-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        color: #cbd5f5;
+    }
+
+    .info-label {
+        font-weight: bold;
+        color: #00ff80;
+    }
+
+    .status-badge {
+        display: inline-block;
+        padding: 8px 20px;
+        border-radius: 20px;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+
+    .status-new {
+        background: rgba(255, 193, 7, 0.2);
+        color: #ffc107;
+        border: 1px solid #ffc107;
+    }
+
+    .status-processing {
+        background: rgba(33, 150, 243, 0.2);
+        color: #2196f3;
+        border: 1px solid #2196f3;
+    }
+
+    .status-sent {
+        background: rgba(76, 175, 80, 0.2);
+        color: #4caf50;
+        border: 1px solid #4caf50;
+    }
+
+    .status-delivered {
+        background: rgba(0, 255, 128, 0.2);
+        color: #00ff80;
+        border: 1px solid #00ff80;
+    }
+
+    .status-cancelled {
+        background: rgba(244, 67, 54, 0.2);
+        color: #f44336;
+        border: 1px solid #f44336;
+    }
+
+    .order-items {
+        background: rgba(15, 20, 40, 0.5);
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+    }
+
+    .order-item-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        border-bottom: 1px solid rgba(0, 255, 128, 0.1);
+        color: #cbd5f5;
+    }
+
+    .order-item-row:last-child {
+        border-bottom: none;
+    }
+
+    .order-item-name {
+        flex: 1;
+        color: #e2e8f0;
+    }
+
+    .order-item-price {
+        text-align: right;
+        color: #00ff80;
+        font-weight: bold;
+    }
+
+    .order-summary {
+        background: rgba(0, 255, 128, 0.05);
+        padding: 15px;
+        border-radius: 8px;
+        border: 1px solid rgba(0, 255, 128, 0.2);
+    }
+
+    .order-total {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: #00ff80;
+        font-weight: bold;
+        font-size: 1.1em;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 15px;
+        margin-top: 30px;
+    }
+
+    .btn-home {
+        flex: 1;
+        padding: 12px 20px;
+        background: linear-gradient(135deg, #00ff80, #00bfff);
+        color: #000;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: bold;
+        text-align: center;
+        transition: 0.3s;
+    }
+
+    .btn-home:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 15px rgba(0, 255, 128, 0.6);
+    }
+
+    .btn-orders {
+        flex: 1;
+        padding: 12px 20px;
+        background: rgba(0, 191, 255, 0.2);
+        color: #00bfff;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: bold;
+        text-align: center;
+        border: 1px solid #00bfff;
+        transition: 0.3s;
+    }
+
+    .btn-orders:hover {
+        background: rgba(0, 191, 255, 0.3);
+        box-shadow: 0 0 15px rgba(0, 191, 255, 0.6);
+    }
+
+    .next-steps {
+        background: rgba(26, 26, 46, 0.7);
+        border: 1px solid rgba(0, 255, 128, 0.2);
+        border-radius: 16px;
+        padding: 25px;
+        margin-top: 20px;
+    }
+
+    .next-steps h3 {
+        color: #00ff80;
+        margin-bottom: 15px;
+    }
+
+    .next-steps ol {
+        color: #cbd5f5;
+        margin-bottom: 0;
+    }
+
+    .next-steps li {
+        margin-bottom: 10px;
+    }
+</style>
+
+<div class="order-detail-container">
+    <div class="order-success-header">
+        <h2>✓ Заказ создан успешно!</h2>
+        <p>Номер вашего заказа: <strong>#{{ order.id }}</strong></p>
+    </div>
+
+    <!-- Основная информация о заказе -->
+    <div class="order-info-card">
+        <h3>Информация о заказе</h3>
+        
+        <div class="info-row">
+            <span class="info-label">Номер заказа:</span>
+            <span>#{{ order.id }}</span>
+        </div>
+        
+        <div class="info-row">
+            <span class="info-label">Дата создания:</span>
+            <span>{{ order.created_at|date:"d.m.Y в H:i" }}</span>
+        </div>
+        
+        <div class="info-row">
+            <span class="info-label">Статус:</span>
+            <span class="status-badge status-{{ order.status }}">{{ order.get_status_display }}</span>
+        </div>
+    </div>
+
+    <!-- Информация о доставке -->
+    <div class="order-info-card">
+        <h3>Данные получателя</h3>
+        
+        <div class="info-row">
+            <span class="info-label">ФИО:</span>
+            <span>{{ order.full_name }}</span>
+        </div>
+        
+        <div class="info-row">
+            <span class="info-label">Телефон:</span>
+            <span>{{ order.phone }}</span>
+        </div>
+        
+        <div class="info-row">
+            <span class="info-label">Адрес доставки:</span>
+            <span>{{ order.address }}</span>
+        </div>
+    </div>
+
+    <!-- Товары в заказе -->
+    <div class="order-info-card">
+        <h3>Товары в заказе</h3>
+        
+        <div class="order-items">
+            {% for item in order.items.all %}
+            <div class="order-item-row">
+                <span class="order-item-name">
+                    {{ item.product.name }}
+                    <span style="color: #999;">x {{ item.quantity }}</span>
+                </span>
+                <span class="order-item-price">{{ item.total_price }} ₸</span>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="order-summary">
+            <div class="order-total">
+                <span>Итого к оплате:</span>
+                <span>{{ order.total_price }} ₸</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Следующие шаги -->
+    <div class="next-steps">
+        <h3>Что дальше?</h3>
+        <ol>
+            <li>Мы получили ваш заказ и уже начали его обработку</li>
+            <li>В ближайшее время с вами свяжется наш менеджер по телефону</li>
+            <li>Вы сможете отслеживать статус заказа в разделе "Мои заказы"</li>
+            <li>Заказ будет доставлен в указанный адрес в согласованное время</li>
+        </ol>
+    </div>
+
+    <!-- Кнопки действия -->
+    <div class="action-buttons">
+        <a href="{% url 'home' %}" class="btn-home">← Вернуться в магазин</a>
+        {% if user.is_authenticated %}
+        <a href="{% url 'orders:my_orders' %}" class="btn-orders">Мои заказы →</a>
+        {% endif %}
+        {% if user.is_staff or not order.user %}
+        <a href="{% url 'delete_order' order.id %}" class="btn-delete" style="background: rgba(244, 67, 54, 0.2); color: #f44336; border: 1px solid #f44336; flex: 1; max-width: 150px; text-align: center;">🗑️ Удалить</a>
+        {% elif user.is_authenticated and order.user == user %}
+        <a href="{% url 'delete_order' order.id %}" class="btn-delete" style="background: rgba(244, 67, 54, 0.2); color: #f44336; border: 1px solid #f44336; flex: 1; max-width: 150px; text-align: center;">🗑️ Удалить</a>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

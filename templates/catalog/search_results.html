@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}Поиск{% endblock %}
+
+{% block content %}
+<style>
+    .search-header {
+        color: #e0f2fe;
+        text-shadow: 0 0 8px rgba(56, 189, 248, 0.7);
+    }
+
+    .search-card, .product-card {
+        background: rgba(15, 23, 42, 0.8);
+        border: 1px solid rgba(56, 189, 248, 0.2);
+        border-radius: 16px;
+        box-shadow: 0 0 18px rgba(8, 145, 178, 0.2);
+    }
+
+    .search-count {
+        color: #cbd5f5;
+    }
+
+    .btn-search-link {
+        background: linear-gradient(135deg, #3b82f6, #06b6d4);
+        border: none;
+        color: #ffffff;
+    }
+</style>
+
+<h2 class="search-header">Поиск</h2>
+
+{% if query %}
+    <p class="search-count">По запросу «<strong>{{ query }}</strong>» найдено {{ products.count }}.</p>
+
+    {% if products %}
+        <div class="row">
+            {% for product in products %}
+            <div class="col-md-4 mb-4">
+                <div class="card product-card h-100">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <p class="card-text">{{ product.description|truncatechars:100 }}</p>
+                        <div class="mt-auto">
+                            <p class="card-text"><strong>{{ product.price }} ₸</strong></p>
+                            <a href="{% url 'product_detail' product.slug %}" class="btn btn-search-link w-100">Подробнее</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-warning">Ничего не найдено. Попробуйте другой запрос.</div>
+    {% endif %}
+{% else %}
+    <div class="alert alert-info">Введите текст для поиска в шапке и нажмите Enter.</div>
+{% endif %}
+
+{% endblock %}
